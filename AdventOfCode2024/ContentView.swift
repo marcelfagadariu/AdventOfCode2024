@@ -11,7 +11,7 @@ struct ContentView: View {
 
     // Test here the class
 
-    let assignment = FirstAssignment()
+    let assignment = Assignment2()
 
     // MARK: - Body
 
@@ -28,7 +28,7 @@ struct ContentView: View {
     }
 
     private func test() {
-        let test = assignment.calculateDistance(left: assignment.leftArray, right: assignment.rightArray)
+        let test = assignment.calculateCollumnSum(assignment.data)
         print(test)
     }
 }
