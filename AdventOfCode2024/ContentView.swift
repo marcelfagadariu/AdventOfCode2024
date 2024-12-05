@@ -11,7 +11,7 @@ struct ContentView: View {
 
     // Test here the class
 
-    let assignment = Assignment2()
+    let assignment = Assignment3()
 
     // MARK: - Body
 
@@ -28,7 +28,7 @@ struct ContentView: View {
     }
 
     private func test() {
-        let test = assignment.calculateCollumnSum(assignment.data)
+        let test = assignment.extractMultiplication(assignment.data)
         print(test)
     }
 }

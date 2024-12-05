@@ -18,8 +18,49 @@ mul(946,420)~)where(719,224)mul(718,516)select()/{# when(),*?<mul(400,748)}who()
 """
 
     func extractMultiplication(_ data: String) -> Int {
+        let mulPattern = #"mul\((\d+),(\d+)\)"#
+        let doPattern = #"do\(\)"#
+        let dontPattern = #"don't\(\)"#
+        guard let mulRegex = try? NSRegularExpression(pattern: mulPattern),
+              let doRegex = try? NSRegularExpression(pattern: doPattern),
+              let dontRegex = try? NSRegularExpression(pattern: dontPattern) else {
+            print("Invalid regex pattern")
+            return 0
+        }
+        let matches = mulRegex.matches(in: data, range: NSRange(data.startIndex..., in: data))
+
+        var isEnabled = true
         var sum = 0
-        
+
+        let inputRange = NSRange(data.startIndex..., in: data)
+        let mulMatches = mulRegex.matches(in: data, range: inputRange)
+        let doMatches = doRegex.matches(in: data, range: inputRange)
+        let dontMatches = dontRegex.matches(in: data, range: inputRange)
+
+        let allMatches = (mulMatches.map { ($0, "mul") } +
+                          doMatches.map { ($0, "do") } +
+                          dontMatches.map { ($0, "don't") })
+            .sorted { $0.0.range.location < $1.0.range.location }
+
+        for (match, type) in allMatches {
+            switch type {
+            case "mul":
+                if isEnabled {
+                    if let firstRange = Range(match.range(at: 1), in: data),
+                       let secondRange = Range(match.range(at: 2), in: data),
+                       let firstNumber = Int(data[firstRange]),
+                       let secondNumber = Int(data[secondRange]) {
+                        sum += firstNumber * secondNumber
+                    }
+                }
+            case "do":
+                isEnabled = true
+            case "don't":
+                isEnabled = false
+            default:
+                break
+            }
+        }
 
         return sum
     }
